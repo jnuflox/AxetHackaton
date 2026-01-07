@@ -1,0 +1,187 @@
+# Propuesta Estructurada - Sistema de Gestión Integral de Proyectos
+
+## 🎯 Visión General
+Sistema integral de 4 capas para gestión, monitoreo y predicción de proyectos tecnológicos cerrados, desde la fase contractual hasta la entrega final.
+
+---
+
+## 📋 CAPA 1: Fundamentos Contractuales y Financieros
+
+### **Objetivo**
+Establecer la línea base del proyecto capturando compromisos contractuales, alcance y parámetros financieros.
+
+### **Inputs**
+- RFP (Request for Proposal)
+- Propuesta Técnica
+- Propuesta Económica
+- L1 (Oferta comercial)
+- ONE ERP (Plan de Facturación)
+
+### **Proceso de Transformación**
+- **RFP** → SLAs comprometidos del servicio
+- **RFP + Propuesta Técnica** → Alcance detallado del servicio
+- **GECOVAL** → Tiempo, TMs (Team Members) y presupuesto del proyecto
+- **L1** → Riesgos iniciales, Oferta CM%, Piso CM%, Otros costos (Cartas fianza, garantías, etc.)
+
+### **Outputs**
+Documento consolidado de línea base del proyecto con:
+- SLAs y compromisos contractuales
+- Alcance técnico definido
+- Estructura financiera y presupuesto
+- Matriz de riesgos inicial
+
+### **Frontend**
+Dashboard ejecutivo con resumen del proyecto mostrando:
+- Compromisos contractuales clave
+- Presupuesto y estructura de costos
+- Acuerdos iniciales y consideraciones especiales
+- Alertas de riesgos contractuales
+
+---
+
+## 📊 CAPA 2: Gestión Operativa del Proyecto
+
+### **Objetivo**
+Monitorear en tiempo real la ejecución del proyecto versus la planificación inicial.
+
+### **Inputs**
+- Cronograma del proyecto (Tiempos de entrega, equipo asignado, esfuerzo estimado)
+- Hitos de facturación
+- Proyecto JIRA (estado actual)
+- Cronograma vivo (actualizaciones continuas)
+
+### **Proceso de Transformación**
+Integración y análisis de datos de gestión para generar KPIs operativos:
+- Cumplimiento de tareas
+- Avance de hitos
+- Cumplimiento de SLAs
+- Identificación de riesgos emergentes
+- Tracking de cambios y CRs
+
+### **Outputs**
+- KPIs consolidados de gestión
+- Reportes de cumplimiento
+- Registro de incidencias y cambios
+
+### **Frontend**
+Panel de control operativo con:
+- **Semáforos por hitos de entrega** (Verde/Amarillo/Rojo)
+- **Métricas de avance**: % Avance real vs % Planificado
+- **Semáforos de SLA** por servicio comprometido
+- **Riesgos identificados** con nivel de severidad
+- **Historial del proyecto**: CRs (Change Requests), cambios de estrategia, decisiones clave
+
+---
+
+## 🔧 CAPA 3: Validación Técnica (CRÍTICA)
+
+### **Objetivo**
+Garantizar calidad técnica del código y cumplimiento de estándares mediante análisis automatizado.
+
+### **Inputs**
+- Repositorio de código fuente (GitLab/GitHub/Bitbucket)
+- Análisis de SonarQube
+- Checklist de calidad y umbrales definidos
+- Estándares del cliente por tecnología
+- Catálogo de antipatrones y lineamientos técnicos
+
+### **Proceso de Transformación**
+Análisis automatizado de:
+- Deuda técnica acumulada
+- Coverage de pruebas
+- Vulnerabilidades de seguridad
+- Cumplimiento de estándares
+- Detección de antipatrones
+- Code smells y complejidad ciclomática
+
+### **Outputs**
+- **Reporte de deuda técnica** (cuantificada y priorizada)
+- **Reporte de coverage** (unitario, integración)
+- **Reporte de funcionalidades implementadas** vs comprometidas
+- **Análisis de cumplimiento** de estándares del cliente
+
+### **Frontend**
+Consola técnica con:
+- Visualización de reportes de calidad
+- Tendencias de deuda técnica
+- Métricas de coverage por módulo
+- Dashboard de vulnerabilidades
+- Mapa de funcionalidades (implementadas/pendientes)
+
+---
+
+## 🤖 CAPA 4: Motor de Inteligencia Predictiva
+
+### **Objetivo**
+Anticipar desviaciones y problemas mediante análisis predictivo basado en IA.
+
+### **Inputs**
+Datos consolidados de todas las capas anteriores:
+- Datos contractuales y financieros (Capa 1)
+- Métricas operativas y de gestión (Capa 2)
+- Métricas de calidad técnica (Capa 3)
+- Datos históricos de proyectos similares
+
+### **Proceso de Transformación**
+Modelos de ML/IA para:
+- Predicción de cumplimiento de plazos
+- Estimación de riesgos de desvío presupuestario
+- Análisis de sensibilidad técnica
+- Análisis de sensibilidad económica
+
+### **Outputs**
+
+#### **Análisis de Sensibilidad Técnica**
+- Probabilidad de cumplimiento de tiempos
+- Predicción de entrega de hitos
+- Riesgo de incumplimiento de SLAs
+- Alertas tempranas de problemas técnicos
+
+#### **Análisis de Sensibilidad Económica**
+- Proyección de CM% (Contribution Margin)
+- Forecast de budget vs real
+- Análisis de funding y WI (Work In Progress)
+- Riesgo de write-off
+- Proyección de rentabilidad final
+
+### **Frontend**
+Dashboard predictivo integrado con Capa 2:
+- **Indicadores de alerta temprana** alineados a KPIs operativos
+- **Proyecciones de cierre** de proyecto (tiempo y presupuesto)
+- **Escenarios what-if** para toma de decisiones
+- **Recomendaciones automatizadas** de acciones correctivas
+- **Score de salud del proyecto** (0-100)
+
+---
+
+## 🔄 Flujo de Integración
+
+```
+CAPA 1 (Baseline) 
+    ↓
+CAPA 2 (Monitoreo) ← Actualización continua
+    ↓
+CAPA 3 (Validación) ← Análisis automatizado
+    ↓
+CAPA 4 (Predicción) → Retroalimentación a Capa 2
+```
+
+---
+
+## 💡 Valor Diferencial
+
+1. **Visión 360°**: Integración contractual, operativa, técnica y predictiva
+2. **Alertas tempranas**: Identificación proactiva de riesgos
+3. **Decisiones basadas en datos**: IA predictiva para gestión anticipada
+4. **Trazabilidad completa**: Desde el RFP hasta el cierre del proyecto
+5. **Calidad garantizada**: Validación técnica automatizada y continua
+
+---
+
+## 🚀 Próximos Pasos Sugeridos
+
+1. Definir prioridad de implementación por capas
+2. Identificar APIs y conectores necesarios
+3. Diseñar arquitectura técnica del sistema
+4. Establecer MVP con funcionalidades core
+5. Definir estrategia de entrenamiento del motor IA

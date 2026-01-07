@@ -1,0 +1,88 @@
+<div class="capa-container">
+  <h2><i class="fas fa-code"></i> Capa 3: Validación Técnica</h2>
+
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Cargando información técnica...</p>
+  </div>
+
+  <div *ngIf="error" class="error">
+    <i class="fas fa-exclamation-circle"></i>
+    <p>{{ error }}</p>
+    <button (click)="loadCapaData()" class="btn-retry">Reintentar</button>
+  </div>
+
+  <div *ngIf="!loading && !error && capaData">
+    <!-- Métricas de Calidad -->
+    <div class="section card" *ngIf="capaData.sonarqube">
+      <h3><i class="fas fa-chart-line"></i> Métricas de Calidad (SonarQube)</h3>
+      <div class="grid grid-3">
+        <div class="metric-card">
+          <h4>Deuda Técnica</h4>
+          <div class="metric-value">{{ capaData.sonarqube.deudaTecnica?.total || 0 }} días</div>
+        </div>
+        <div class="metric-card">
+          <h4>Code Smells</h4>
+          <div class="metric-value">{{ capaData.sonarqube.codeSmells || 0 }}</div>
+        </div>
+        <div class="metric-card">
+          <h4>Duplicación</h4>
+          <div class="metric-value">{{ capaData.sonarqube.duplicacion || 0 }}%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coverage -->
+    <div class="section card" *ngIf="capaData.coverage">
+      <h3><i class="fas fa-shield-alt"></i> Cobertura de Testing</h3>
+      <div class="grid grid-2">
+        <div class="coverage-item">
+          <strong>Cobertura Unitaria:</strong>
+          <div class="progress-bar">
+            <div class="progress" [style.width.%]="capaData.coverage.unitario?.lineCoverage || 0"></div>
+          </div>
+          <span>{{ capaData.coverage.unitario?.lineCoverage || 0 }}%</span>
+        </div>
+        <div class="coverage-item">
+          <strong>Cobertura Integración:</strong>
+          <div class="progress-bar">
+            <div class="progress" [style.width.%]="capaData.coverage.integracion?.lineCoverage || 0"></div>
+          </div>
+          <span>{{ capaData.coverage.integracion?.lineCoverage || 0 }}%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vulnerabilidades -->
+    <div class="section card" *ngIf="capaData.vulnerabilidades?.length">
+      <h3><i class="fas fa-bug"></i> Vulnerabilidades</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Descripción</th>
+            <th>Severidad</th>
+            <th>CVE</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let vuln of capaData.vulnerabilidades">
+            <td>{{ vuln.descripcion }}</td>
+            <td>
+              <span class="badge" [ngClass]="'badge-' + vuln.severidad?.toLowerCase()">
+                {{ vuln.severidad }}
+              </span>
+            </td>
+            <td>{{ vuln.cve || 'N/A' }}</td>
+            <td>{{ vuln.estado }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && !error && !capaData" class="empty-state">
+    <i class="fas fa-inbox"></i>
+    <p>No hay información técnica registrada para este proyecto</p>
+  </div>
+</div>

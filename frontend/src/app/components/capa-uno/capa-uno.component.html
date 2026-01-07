@@ -1,0 +1,83 @@
+<div class="capa-container">
+  <h2><i class="fas fa-file-contract"></i> Capa 1: Fundamentos Contractuales y Financieros</h2>
+
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Cargando información contractual...</p>
+  </div>
+
+  <div *ngIf="error" class="error">
+    <i class="fas fa-exclamation-circle"></i>
+    <p>{{ error }}</p>
+    <button (click)="loadCapaData()" class="btn-retry">Reintentar</button>
+  </div>
+
+  <div *ngIf="!loading && !error && capaData">
+    <!-- Información General -->
+    <div class="section card">
+      <h3><i class="fas fa-info-circle"></i> Información General</h3>
+      <div class="grid grid-2">
+        <div class="info-item">
+          <strong>Presupuesto Total:</strong>
+          <p>{{ formatCurrency(capaData.gecoval?.presupuesto || capaData.propuestaEconomica?.presupuestoTotal) }}</p>
+        </div>
+        <div class="info-item">
+          <strong>Duración:</strong>
+          <p>{{ capaData.gecoval?.duracionMeses }} meses</p>
+        </div>
+        <div class="info-item">
+          <strong>Team Members:</strong>
+          <p>{{ capaData.gecoval?.teamMembers }} personas</p>
+        </div>
+        <div class="info-item">
+          <strong>Esfuerzo Estimado:</strong>
+          <p>{{ capaData.gecoval?.esfuerzoEstimadoHoras }} horas</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLAs -->
+    <div class="section card" *ngIf="capaData.rfp?.slas?.length">
+      <h3><i class="fas fa-chart-line"></i> SLAs Comprometidos</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>SLA</th>
+            <th>Métrica</th>
+            <th>Valor Compromiso</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let sla of capaData.rfp.slas">
+            <td><strong>{{ sla.nombre }}</strong></td>
+            <td>{{ sla.metrica }}</td>
+            <td>{{ sla.valorCompromiso }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Riesgos Iniciales -->
+    <div class="section card" *ngIf="capaData.l1?.riesgosIniciales?.length">
+      <h3><i class="fas fa-exclamation-triangle"></i> Riesgos Iniciales</h3>
+      <div class="riesgos-list">
+        <div class="riesgo-item" *ngFor="let riesgo of capaData.l1.riesgosIniciales">
+          <div class="riesgo-header">
+            <strong>{{ riesgo.descripcion }}</strong>
+            <span class="badge" [ngClass]="'badge-' + getRiskColor(riesgo.severidad)">
+              {{ riesgo.severidad }}
+            </span>
+          </div>
+          <p><strong>Probabilidad:</strong> {{ riesgo.probabilidad }}</p>
+          <p><strong>Impacto:</strong> {{ riesgo.impacto }}</p>
+          <p *ngIf="riesgo.planMitigacion"><strong>Plan de Mitigación:</strong> {{ riesgo.planMitigacion }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && !error && !capaData" class="empty-state">
+    <i class="fas fa-inbox"></i>
+    <p>No hay información contractual registrada para este proyecto</p>
+  </div>
+</div>

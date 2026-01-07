@@ -1,0 +1,462 @@
+<mxfile host="app.diagrams.net" modified="2024-01-06T00:00:00.000Z" agent="Claude" version="22.0.0">
+  <diagram name="Sistema Gestión Integral Proyectos" id="sistema-gestion">
+    <mxGraphModel dx="1434" dy="844" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3000" pageHeight="2000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- TÍTULO -->
+        <mxCell id="titulo" value="SISTEMA DE GESTIÓN INTEGRAL DE PROYECTOS - ARQUITECTURA FUNCIONAL" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="900" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ========== CAPA 1: CONTRACTUAL Y FINANCIERA ========== -->
+        <mxCell id="pool-capa1" value="CAPA 1: FUNDAMENTOS CONTRACTUALES Y FINANCIEROS" style="swimlane;html=1;childLayout=stackLayout;resizeParent=1;resizeParentMax=0;horizontal=1;startSize=40;horizontalStack=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="100" width="2800" height="320" as="geometry" />
+        </mxCell>
+
+        <mxCell id="lane-inputs1" value="Inputs Documentales" style="swimlane;html=1;startSize=30;horizontal=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="pool-capa1">
+          <mxGeometry y="40" width="2800" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Inputs Capa 1 -->
+        <mxCell id="doc-rfp" value="RFP" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="lane-inputs1">
+          <mxGeometry x="40" y="20" width="100" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="doc-prop-tec" value="Propuesta&#xa;Técnica" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="lane-inputs1">
+          <mxGeometry x="180" y="20" width="100" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="doc-prop-eco" value="Propuesta&#xa;Económica" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="lane-inputs1">
+          <mxGeometry x="320" y="20" width="100" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="doc-l1" value="L1&#xa;(Oferta)" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="lane-inputs1">
+          <mxGeometry x="460" y="20" width="100" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="doc-erp" value="ONE ERP&#xa;(Plan Fact.)" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="lane-inputs1">
+          <mxGeometry x="600" y="20" width="100" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="lane-proceso1" value="Procesamiento y APIs" style="swimlane;html=1;startSize=30;horizontal=0;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="pool-capa1">
+          <mxGeometry y="140" width="2800" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- API Integración Documental -->
+        <mxCell id="api-doc-parser" value="API&#xa;Document Parser&#xa;(OCR/NLP)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="lane-proceso1">
+          <mxGeometry x="100" y="25" width="120" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Conectores de inputs a API -->
+        <mxCell id="edge1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="pool-capa1" source="doc-rfp" target="api-doc-parser">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="pool-capa1" source="doc-prop-tec" target="api-doc-parser">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="pool-capa1" source="doc-prop-eco" target="api-doc-parser">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- API ERP -->
+        <mxCell id="api-erp" value="API&#xa;ERP Connector&#xa;(REST/SOAP)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="lane-proceso1">
+          <mxGeometry x="600" y="25" width="120" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa1" source="doc-erp" target="api-erp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Motor de Procesamiento Capa 1 -->
+        <mxCell id="proc-baseline" value="Motor de&#xa;Baseline del&#xa;Proyecto" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="lane-proceso1">
+          <mxGeometry x="850" y="25" width="140" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa1" source="api-doc-parser" target="proc-baseline">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa1" source="api-erp" target="proc-baseline">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Base de Datos Contractual -->
+        <mxCell id="db-contractual" value="DB&#xa;Contractual" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="lane-proceso1">
+          <mxGeometry x="1080" y="20" width="100" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa1" source="proc-baseline" target="db-contractual">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="lane-outputs1" value="Outputs / Frontend" style="swimlane;html=1;startSize=30;horizontal=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="pool-capa1">
+          <mxGeometry y="260" width="2800" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Frontend Capa 1 -->
+        <mxCell id="front-capa1" value="Dashboard Ejecutivo&#xa;(Baseline del Proyecto)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b1ddf0;strokeColor=#10739e;fontStyle=1" vertex="1" parent="lane-outputs1">
+          <mxGeometry x="1260" y="10" width="200" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa1" source="db-contractual" target="front-capa1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ========== CAPA 2: GESTIÓN DE PROYECTO ========== -->
+        <mxCell id="pool-capa2" value="CAPA 2: GESTIÓN OPERATIVA DEL PROYECTO" style="swimlane;html=1;childLayout=stackLayout;resizeParent=1;resizeParentMax=0;horizontal=1;startSize=40;horizontalStack=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="460" width="2800" height="360" as="geometry" />
+        </mxCell>
+
+        <mxCell id="lane-inputs2" value="Inputs de Gestión" style="swimlane;html=1;startSize=30;horizontal=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="pool-capa2">
+          <mxGeometry y="40" width="2800" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Inputs Capa 2 -->
+        <mxCell id="input-cronograma" value="Cronograma&#xa;MS Project/&#xa;Primavera" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="lane-inputs2">
+          <mxGeometry x="40" y="20" width="100" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="input-jira" value="Proyecto&#xa;JIRA&#xa;(Vivo)" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="lane-inputs2">
+          <mxGeometry x="180" y="20" width="100" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="input-hitos" value="Hitos de&#xa;Facturación" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="lane-inputs2">
+          <mxGeometry x="320" y="20" width="100" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="input-equipo" value="Asignación&#xa;de Equipo" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="lane-inputs2">
+          <mxGeometry x="460" y="20" width="100" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="lane-proceso2" value="Procesamiento y APIs" style="swimlane;html=1;startSize=30;horizontal=0;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="pool-capa2">
+          <mxGeometry y="140" width="2800" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- APIs Capa 2 -->
+        <mxCell id="api-jira" value="API&#xa;JIRA REST" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="lane-proceso2">
+          <mxGeometry x="180" y="20" width="100" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa2" source="input-jira" target="api-jira">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="api-msp" value="API&#xa;MS Project&#xa;Parser" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="lane-proceso2">
+          <mxGeometry x="40" y="20" width="100" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa2" source="input-cronograma" target="api-msp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Motor KPIs -->
+        <mxCell id="proc-kpis" value="Motor de&#xa;Cálculo de KPIs&#xa;y Semáforos" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="lane-proceso2">
+          <mxGeometry x="400" y="20" width="140" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa2" source="api-jira" target="proc-kpis">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa2" source="api-msp" target="proc-kpis">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Motor SLA -->
+        <mxCell id="proc-sla" value="Monitor de&#xa;SLAs" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="lane-proceso2">
+          <mxGeometry x="400" y="100" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Conector desde DB Contractual (Capa 1) -->
+        <mxCell id="edge-c1-c2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#ff0000;strokeWidth=2;dashed=1;" edge="1" parent="1" source="db-contractual" target="proc-sla">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Base de Datos Operacional -->
+        <mxCell id="db-operacional" value="DB&#xa;Operacional" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="lane-proceso2">
+          <mxGeometry x="640" y="40" width="100" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa2" source="proc-kpis" target="db-operacional">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa2" source="proc-sla" target="db-operacional">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="lane-outputs2" value="Outputs / Frontend" style="swimlane;html=1;startSize=30;horizontal=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="pool-capa2">
+          <mxGeometry y="300" width="2800" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Frontend Capa 2 -->
+        <mxCell id="front-capa2" value="Panel de Control Operativo&#xa;(KPIs, Semáforos, Riesgos)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b1ddf0;strokeColor=#10739e;fontStyle=1" vertex="1" parent="lane-outputs2">
+          <mxGeometry x="840" y="10" width="220" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa2" source="db-operacional" target="front-capa2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ========== CAPA 3: VALIDACIÓN TÉCNICA ========== -->
+        <mxCell id="pool-capa3" value="CAPA 3: VALIDACIÓN TÉCNICA (CRÍTICA)" style="swimlane;html=1;childLayout=stackLayout;resizeParent=1;resizeParentMax=0;horizontal=1;startSize=40;horizontalStack=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="860" width="2800" height="400" as="geometry" />
+        </mxCell>
+
+        <mxCell id="lane-inputs3" value="Inputs Técnicos" style="swimlane;html=1;startSize=30;horizontal=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="pool-capa3">
+          <mxGeometry y="40" width="2800" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Inputs Capa 3 -->
+        <mxCell id="input-repo" value="Repositorio&#xa;GitLab/GitHub/&#xa;Bitbucket" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="lane-inputs3">
+          <mxGeometry x="40" y="15" width="110" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="input-sonar" value="SonarQube&#xa;Reports" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="lane-inputs3">
+          <mxGeometry x="190" y="15" width="110" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="input-checklist" value="Checklist&#xa;Calidad" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="lane-inputs3">
+          <mxGeometry x="340" y="15" width="110" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="input-estandares" value="Estándares&#xa;Cliente" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="lane-inputs3">
+          <mxGeometry x="490" y="15" width="110" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="lane-proceso3" value="Procesamiento y APIs" style="swimlane;html=1;startSize=30;horizontal=0;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="pool-capa3">
+          <mxGeometry y="140" width="2800" height="200" as="geometry" />
+        </mxCell>
+
+        <!-- APIs Capa 3 -->
+        <mxCell id="api-git" value="API&#xa;Git&#xa;Connector" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="lane-proceso3">
+          <mxGeometry x="50" y="20" width="90" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa3" source="input-repo" target="api-git">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="api-sonar" value="API&#xa;SonarQube" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="lane-proceso3">
+          <mxGeometry x="200" y="20" width="90" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa3" source="input-sonar" target="api-sonar">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Motor de Análisis de Código -->
+        <mxCell id="proc-code-analysis" value="Motor de&#xa;Análisis de&#xa;Código" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="lane-proceso3">
+          <mxGeometry x="380" y="20" width="140" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa3" source="api-git" target="proc-code-analysis">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa3" source="api-sonar" target="proc-code-analysis">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Motor de Validación de Estándares -->
+        <mxCell id="proc-standards" value="Motor de&#xa;Validación de&#xa;Estándares" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="lane-proceso3">
+          <mxGeometry x="380" y="110" width="140" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa3" source="input-estandares" target="proc-standards">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa3" source="input-checklist" target="proc-standards">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Base de Datos Técnica -->
+        <mxCell id="db-tecnica" value="DB&#xa;Calidad&#xa;Técnica" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="lane-proceso3">
+          <mxGeometry x="600" y="60" width="100" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa3" source="proc-code-analysis" target="db-tecnica">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa3" source="proc-standards" target="db-tecnica">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="lane-outputs3" value="Outputs / Frontend" style="swimlane;html=1;startSize=30;horizontal=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="pool-capa3">
+          <mxGeometry y="340" width="2800" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Frontend Capa 3 -->
+        <mxCell id="front-capa3" value="Consola Técnica&#xa;(Deuda Técnica, Coverage, Vulnerabilidades)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b1ddf0;strokeColor=#10739e;fontStyle=1" vertex="1" parent="lane-outputs3">
+          <mxGeometry x="780" y="10" width="260" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa3" source="db-tecnica" target="front-capa3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ========== CAPA 4: MOTOR IA PREDICTIVA ========== -->
+        <mxCell id="pool-capa4" value="CAPA 4: MOTOR DE INTELIGENCIA PREDICTIVA" style="swimlane;html=1;childLayout=stackLayout;resizeParent=1;resizeParentMax=0;horizontal=1;startSize=40;horizontalStack=0;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="1300" width="2800" height="440" as="geometry" />
+        </mxCell>
+
+        <mxCell id="lane-inputs4" value="Inputs de Todas las Capas" style="swimlane;html=1;startSize=30;horizontal=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="pool-capa4">
+          <mxGeometry y="40" width="2800" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Inputs desde otras capas -->
+        <mxCell id="input-c1-data" value="Datos&#xa;Contractuales&#xa;(Capa 1)" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="lane-inputs4">
+          <mxGeometry x="40" y="20" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="input-c2-data" value="KPIs&#xa;Operacionales&#xa;(Capa 2)" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="lane-inputs4">
+          <mxGeometry x="200" y="20" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="input-c3-data" value="Métricas&#xa;Técnicas&#xa;(Capa 3)" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="lane-inputs4">
+          <mxGeometry x="360" y="20" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="input-historico" value="Datos&#xa;Históricos&#xa;Proyectos" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="lane-inputs4">
+          <mxGeometry x="520" y="20" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Conectores desde capas anteriores -->
+        <mxCell id="edge-c1-c4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#ff6600;strokeWidth=2;dashed=1;" edge="1" parent="1" source="db-contractual" target="input-c1-data">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-c2-c4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#ff6600;strokeWidth=2;dashed=1;" edge="1" parent="1" source="db-operacional" target="input-c2-data">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge-c3-c4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#ff6600;strokeWidth=2;dashed=1;" edge="1" parent="1" source="db-tecnica" target="input-c3-data">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="lane-proceso4" value="Procesamiento IA/ML" style="swimlane;html=1;startSize=30;horizontal=0;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="pool-capa4">
+          <mxGeometry y="140" width="2800" height="240" as="geometry" />
+        </mxCell>
+
+        <!-- Data Lake -->
+        <mxCell id="data-lake" value="Data Lake&#xa;(Consolidado)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#fad7ac;strokeColor=#b46504;" vertex="1" parent="lane-proceso4">
+          <mxGeometry x="140" y="40" width="120" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa4" source="input-c1-data" target="data-lake">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa4" source="input-c2-data" target="data-lake">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa4" source="input-c3-data" target="data-lake">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa4" source="input-historico" target="data-lake">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Feature Engineering -->
+        <mxCell id="proc-features" value="Feature&#xa;Engineering" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="lane-proceso4">
+          <mxGeometry x="340" y="50" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa4" source="data-lake" target="proc-features">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Modelos ML -->
+        <mxCell id="ml-tiempo" value="Modelo ML&#xa;Predicción&#xa;Tiempo" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1" vertex="1" parent="lane-proceso4">
+          <mxGeometry x="540" y="20" width="110" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ml-economico" value="Modelo ML&#xa;Predicción&#xa;Económica" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1" vertex="1" parent="lane-proceso4">
+          <mxGeometry x="540" y="110" width="110" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa4" source="proc-features" target="ml-tiempo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa4" source="proc-features" target="ml-economico">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Motor de Recomendaciones -->
+        <mxCell id="proc-recomendaciones" value="Motor de&#xa;Recomendaciones&#xa;y Alertas" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="lane-proceso4">
+          <mxGeometry x="730" y="50" width="140" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa4" source="ml-tiempo" target="proc-recomendaciones">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa4" source="ml-economico" target="proc-recomendaciones">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- DB Predictiva -->
+        <mxCell id="db-predictiva" value="DB&#xa;Predictiva" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="lane-proceso4">
+          <mxGeometry x="950" y="50" width="100" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa4" source="proc-recomendaciones" target="db-predictiva">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="lane-outputs4" value="Outputs / Frontend Integrado" style="swimlane;html=1;startSize=30;horizontal=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="pool-capa4">
+          <mxGeometry y="380" width="2800" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Frontend Capa 4 -->
+        <mxCell id="front-capa4" value="Dashboard Predictivo Integrado&#xa;(Alertas Tempranas, Proyecciones, Recomendaciones)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b1ddf0;strokeColor=#10739e;fontStyle=1" vertex="1" parent="lane-outputs4">
+          <mxGeometry x="1140" y="10" width="320" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="pool-capa4" source="db-predictiva" target="front-capa4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Retroalimentación a Capa 2 -->
+        <mxCell id="edge-c4-c2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#00ff00;strokeWidth=3;dashed=1;" edge="1" parent="1" source="db-predictiva" target="front-capa2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ========== LEYENDA ========== -->
+        <mxCell id="leyenda-title" value="LEYENDA" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="2100" y="100" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ley-input" value="Input Documental" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="2100" y="140" width="90" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ley-api" value="API/Conector" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="2220" y="140" width="90" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ley-proceso" value="Procesamiento" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="2100" y="210" width="90" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ley-db" value="Base de&#xa;Datos" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="2220" y="210" width="70" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ley-frontend" value="Frontend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b1ddf0;strokeColor=#10739e;" vertex="1" parent="1">
+          <mxGeometry x="2100" y="280" width="90" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ley-ml" value="Modelo ML" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="2220" y="280" width="90" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ========== LISTADO DE APIs Y CONECTORES ========== -->
+        <mxCell id="apis-title" value="APIs Y CONECTORES NECESARIOS" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="2100" y="380" width="400" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="apis-list" value="CAPA 1:&#xa;• Document Parser API (OCR/NLP) - Azure Form Recognizer / AWS Textract&#xa;• ERP Connector API - REST/SOAP según ONE ERP&#xa;&#xa;CAPA 2:&#xa;• JIRA REST API - Atlassian JIRA Cloud/Server&#xa;• MS Project Parser API - Aspose.Tasks / ProjectLibre&#xa;• Primavera API - Oracle Primavera Cloud&#xa;&#xa;CAPA 3:&#xa;• Git Connector API - GitLab API / GitHub API / Bitbucket API&#xa;• SonarQube API - SonarCloud / SonarQube Server&#xa;• Static Code Analysis - ESLint, PMD, Checkstyle APIs&#xa;&#xa;CAPA 4:&#xa;• ML Framework - TensorFlow / PyTorch / Scikit-learn&#xa;• Data Pipeline - Apache Airflow / Prefect&#xa;• Feature Store - Feast / Tecton&#xa;&#xa;TRANSVERSALES:&#xa;• Authentication - OAuth 2.0 / SAML 2.0&#xa;• Notification API - SendGrid / Twilio&#xa;• Monitoring - Prometheus / Grafana&#xa;• Logging - ELK Stack (Elasticsearch, Logstash, Kibana)" style="text;html=1;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="2100" y="420" width="650" height="360" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

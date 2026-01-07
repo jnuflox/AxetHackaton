@@ -1,0 +1,91 @@
+<div class="capa-container">
+  <h2><i class="fas fa-brain"></i> Capa 4: Inteligencia Predictiva</h2>
+
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Cargando análisis predictivo...</p>
+  </div>
+
+  <div *ngIf="error" class="error">
+    <i class="fas fa-exclamation-circle"></i>
+    <p>{{ error }}</p>
+    <button (click)="loadCapaData()" class="btn-retry">Reintentar</button>
+  </div>
+
+  <div *ngIf="!loading && !error && capaData">
+    <!-- Score Global -->
+    <div class="section card" *ngIf="capaData.scoreGlobal">
+      <h3><i class="fas fa-star"></i> Score Global de Salud</h3>
+      <div class="score-container">
+        <div class="score-circle">
+          <div class="score-number">{{ capaData.scoreGlobal.valor || 0 }}</div>
+          <div class="score-label">Score</div>
+        </div>
+        <div class="score-details">
+          <div class="tendencia" [ngClass]="getTendenciaClass(capaData.scoreGlobal.tendencia)">
+            <i class="fas" [ngClass]="getTendenciaIcon(capaData.scoreGlobal.tendencia)"></i>
+            <span>{{ capaData.scoreGlobal.tendencia }}</span>
+          </div>
+          <p><strong>Última actualización:</strong> {{ capaData.scoreGlobal.ultimaActualizacion }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Predicciones -->
+    <div class="section card" *ngIf="capaData.sensibilidadTecnica">
+      <h3><i class="fas fa-chart-line"></i> Predicciones</h3>
+      <div class="grid grid-2">
+        <div class="prediction-card">
+          <h4>Probabilidad Cumplimiento Plazos</h4>
+          <div class="prediction-value">
+            {{ capaData.sensibilidadTecnica.probabilidadCumplimientoPlazos || 0 }}%
+          </div>
+        </div>
+        <div class="prediction-card">
+          <h4>Proyección CM</h4>
+          <div class="prediction-value">
+            {{ capaData.sensibilidadEconomica?.proyeccionCM?.proyectado || 0 }}%
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alertas Tempranas -->
+    <div class="section card" *ngIf="capaData.sensibilidadTecnica?.alertasTempranas?.length">
+      <h3><i class="fas fa-bell"></i> Alertas Tempranas</h3>
+      <div class="alertas-list">
+        <div class="alerta-item" *ngFor="let alerta of capaData.sensibilidadTecnica.alertasTempranas">
+          <div class="alerta-header">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>{{ alerta.tipo }}</strong>
+            <span class="badge" [ngClass]="'badge-' + alerta.severidad?.toLowerCase()">
+              {{ alerta.severidad }}
+            </span>
+          </div>
+          <p>{{ alerta.descripcion }}</p>
+          <p class="alerta-fecha"><small>Detectada: {{ alerta.fechaDeteccion }}</small></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recomendaciones -->
+    <div class="section card" *ngIf="capaData.recomendaciones?.length">
+      <h3><i class="fas fa-lightbulb"></i> Recomendaciones IA</h3>
+      <div class="recomendaciones-list">
+        <div class="recomendacion-item" *ngFor="let rec of capaData.recomendaciones">
+          <div class="rec-header">
+            <strong>{{ rec.categoria }}</strong>
+            <span class="badge badge-prioridad">Prioridad: {{ rec.prioridad }}</span>
+          </div>
+          <p>{{ rec.descripcion }}</p>
+          <p class="rec-impacto"><strong>Impacto esperado:</strong> {{ rec.impactoEsperado }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && !error && !capaData" class="empty-state">
+    <i class="fas fa-inbox"></i>
+    <p>No hay información predictiva registrada para este proyecto</p>
+  </div>
+</div>

@@ -1,0 +1,86 @@
+<div class="capa-container">
+  <h2><i class="fas fa-tasks"></i> Capa 2: Gestión Operativa</h2>
+
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Cargando información operativa...</p>
+  </div>
+
+  <div *ngIf="error" class="error">
+    <i class="fas fa-exclamation-circle"></i>
+    <p>{{ error }}</p>
+    <button (click)="loadCapaData()" class="btn-retry">Reintentar</button>
+  </div>
+
+  <div *ngIf="!loading && !error && capaData">
+    <!-- KPIs -->
+    <div class="section card" *ngIf="capaData.kpis">
+      <h3><i class="fas fa-chart-bar"></i> KPIs Principales</h3>
+      <div class="grid grid-3">
+        <div class="kpi-card">
+          <h4>Avance Hitos</h4>
+          <div class="kpi-value">{{ capaData.kpis.avanceHitos }}%</div>
+        </div>
+        <div class="kpi-card">
+          <h4>Cumplimiento Tareas</h4>
+          <div class="kpi-value">{{ capaData.kpis.cumplimientoTareas }}%</div>
+        </div>
+        <div class="kpi-card">
+          <h4>Cumplimiento SLAs</h4>
+          <div class="kpi-value">{{ capaData.kpis.cumplimientoSLAs }}%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hitos -->
+    <div class="section card" *ngIf="capaData.cronograma?.hitos?.length">
+      <h3><i class="fas fa-flag-checkered"></i> Hitos del Proyecto</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Hito</th>
+            <th>Fecha Planificada</th>
+            <th>Fecha Real</th>
+            <th>Estado</th>
+            <th>Semáforo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let hito of capaData.cronograma.hitos">
+            <td><strong>{{ hito.nombre }}</strong></td>
+            <td>{{ hito.fechaPlanificada }}</td>
+            <td>{{ hito.fechaReal || 'Pendiente' }}</td>
+            <td>{{ hito.estado }}</td>
+            <td>
+              <span class="badge" [ngClass]="getSemaforoClass(hito.semaforo)">
+                {{ hito.semaforo }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Riesgos Activos -->
+    <div class="section card" *ngIf="capaData.riesgos?.length">
+      <h3><i class="fas fa-exclamation-triangle"></i> Riesgos Activos</h3>
+      <div class="riesgos-list">
+        <div class="riesgo-item" *ngFor="let riesgo of capaData.riesgos">
+          <div class="riesgo-header">
+            <strong>{{ riesgo.descripcion }}</strong>
+            <span class="badge" [ngClass]="'badge-' + riesgo.severidad?.toLowerCase()">
+              {{ riesgo.severidad }}
+            </span>
+          </div>
+          <p><strong>Estado:</strong> {{ riesgo.estado }}</p>
+          <p><strong>Plan de Mitigación:</strong> {{ riesgo.planMitigacion || 'N/A' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && !error && !capaData" class="empty-state">
+    <i class="fas fa-inbox"></i>
+    <p>No hay información operativa registrada para este proyecto</p>
+  </div>
+</div>
