@@ -22,11 +22,20 @@
           <div class="score-label">Score</div>
         </div>
         <div class="score-details">
-          <div class="tendencia" [ngClass]="getTendenciaClass(capaData.scoreGlobal.tendencia)">
-            <i class="fas" [ngClass]="getTendenciaIcon(capaData.scoreGlobal.tendencia)"></i>
+          <div
+            class="tendencia"
+            [ngClass]="getTendenciaClass(capaData.scoreGlobal.tendencia)"
+          >
+            <i
+              class="fas"
+              [ngClass]="getTendenciaIcon(capaData.scoreGlobal.tendencia)"
+            ></i>
             <span>{{ capaData.scoreGlobal.tendencia }}</span>
           </div>
-          <p><strong>Última actualización:</strong> {{ capaData.scoreGlobal.ultimaActualizacion }}</p>
+          <p>
+            <strong>Última actualización:</strong>
+            {{ capaData.scoreGlobal.ultimaActualizacion }}
+          </p>
         </div>
       </div>
     </div>
@@ -38,7 +47,9 @@
         <div class="prediction-card">
           <h4>Probabilidad Cumplimiento Plazos</h4>
           <div class="prediction-value">
-            {{ capaData.sensibilidadTecnica.probabilidadCumplimientoPlazos || 0 }}%
+            {{
+              capaData.sensibilidadTecnica.probabilidadCumplimientoPlazos || 0
+            }}%
           </div>
         </div>
         <div class="prediction-card">
@@ -51,19 +62,30 @@
     </div>
 
     <!-- Alertas Tempranas -->
-    <div class="section card" *ngIf="capaData.sensibilidadTecnica?.alertasTempranas?.length">
+    <div
+      class="section card"
+      *ngIf="capaData.sensibilidadTecnica?.alertasTempranas?.length"
+    >
       <h3><i class="fas fa-bell"></i> Alertas Tempranas</h3>
       <div class="alertas-list">
-        <div class="alerta-item" *ngFor="let alerta of capaData.sensibilidadTecnica.alertasTempranas">
+        <div
+          class="alerta-item"
+          *ngFor="let alerta of capaData.sensibilidadTecnica.alertasTempranas"
+        >
           <div class="alerta-header">
             <i class="fas fa-exclamation-triangle"></i>
             <strong>{{ alerta.tipo }}</strong>
-            <span class="badge" [ngClass]="'badge-' + alerta.severidad?.toLowerCase()">
+            <span
+              class="badge"
+              [ngClass]="'badge-' + alerta.severidad?.toLowerCase()"
+            >
               {{ alerta.severidad }}
             </span>
           </div>
           <p>{{ alerta.descripcion }}</p>
-          <p class="alerta-fecha"><small>Detectada: {{ alerta.fechaDeteccion }}</small></p>
+          <p class="alerta-fecha">
+            <small>Detectada: {{ alerta.fechaDeteccion }}</small>
+          </p>
         </div>
       </div>
     </div>
@@ -72,13 +94,119 @@
     <div class="section card" *ngIf="capaData.recomendaciones?.length">
       <h3><i class="fas fa-lightbulb"></i> Recomendaciones IA</h3>
       <div class="recomendaciones-list">
-        <div class="recomendacion-item" *ngFor="let rec of capaData.recomendaciones">
+        <div
+          class="recomendacion-item"
+          *ngFor="let rec of capaData.recomendaciones"
+        >
           <div class="rec-header">
             <strong>{{ rec.categoria }}</strong>
-            <span class="badge badge-prioridad">Prioridad: {{ rec.prioridad }}</span>
+            <span class="badge badge-prioridad"
+              >Prioridad: {{ rec.prioridad }}</span
+            >
           </div>
           <p>{{ rec.descripcion }}</p>
-          <p class="rec-impacto"><strong>Impacto esperado:</strong> {{ rec.impactoEsperado }}</p>
+          <p class="rec-impacto">
+            <strong>Impacto esperado:</strong> {{ rec.impactoEsperado }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conectores de Integración -->
+    <div class="section card" *ngIf="capaData.conectores?.length">
+      <h3><i class="fas fa-plug"></i> Conectores de Integración</h3>
+      <p class="conectores-descripcion">
+        Fuentes de datos conectadas para alimentar el análisis predictivo
+      </p>
+
+      <!-- Filtros por categoría -->
+      <div class="conectores-filtros">
+        <button
+          class="filtro-btn"
+          [class.active]="filtroConector === 'TODOS'"
+          (click)="filtroConector = 'TODOS'"
+        >
+          Todos
+        </button>
+        <button
+          class="filtro-btn"
+          [class.active]="filtroConector === 'ACTIVO'"
+          (click)="filtroConector = 'ACTIVO'"
+        >
+          <span class="status-dot activo"></span> Activos
+        </button>
+        <button
+          class="filtro-btn"
+          [class.active]="filtroConector === 'DISPONIBLE'"
+          (click)="filtroConector = 'DISPONIBLE'"
+        >
+          <span class="status-dot disponible"></span> Disponibles
+        </button>
+      </div>
+
+      <div class="conectores-grid">
+        <div
+          class="conector-card"
+          *ngFor="let conector of getConectoresFiltrados()"
+          [class.activo]="conector.estado === 'ACTIVO'"
+          [class.disponible]="conector.estado === 'DISPONIBLE'"
+        >
+          <div class="conector-header">
+            <div
+              class="conector-icon"
+              [style.background-color]="conector.color"
+            >
+              <i [class]="conector.icono"></i>
+            </div>
+            <div class="conector-info">
+              <h4>{{ conector.nombre }}</h4>
+              <span class="conector-categoria">{{ conector.categoria }}</span>
+            </div>
+            <span
+              class="conector-status"
+              [class]="'status-' + conector.estado.toLowerCase()"
+            >
+              {{ conector.estado }}
+            </span>
+          </div>
+          <p class="conector-descripcion">{{ conector.descripcion }}</p>
+          <div class="conector-datos">
+            <strong>Datos obtenidos:</strong>
+            <div class="datos-tags">
+              <span
+                class="dato-tag"
+                *ngFor="let dato of conector.datosObtenidos"
+                >{{ dato }}</span
+              >
+            </div>
+          </div>
+          <div class="conector-footer" *ngIf="conector.ultimaSync">
+            <small
+              ><i class="fas fa-sync-alt"></i> Última sync:
+              {{ conector.ultimaSync }}</small
+            >
+          </div>
+          <div class="conector-footer" *ngIf="!conector.ultimaSync">
+            <button class="btn-conectar">
+              <i class="fas fa-link"></i> Conectar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resumen de conectores -->
+      <div class="conectores-resumen">
+        <div class="resumen-item">
+          <span class="resumen-numero">{{ getConectoresActivos() }}</span>
+          <span class="resumen-label">Conectores Activos</span>
+        </div>
+        <div class="resumen-item">
+          <span class="resumen-numero">{{ getConectoresDisponibles() }}</span>
+          <span class="resumen-label">Disponibles para Conectar</span>
+        </div>
+        <div class="resumen-item">
+          <span class="resumen-numero">{{ getTotalDatosObtenidos() }}</span>
+          <span class="resumen-label">Tipos de Datos</span>
         </div>
       </div>
     </div>

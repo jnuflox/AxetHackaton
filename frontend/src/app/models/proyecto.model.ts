@@ -15,11 +15,16 @@ export interface Proyecto {
   capaCuatro?: string;
 }
 
-export type EstadoProyecto = 'PLANIFICACION' | 'EN_EJECUCION' | 'EN_CIERRE' | 'CERRADO' | 'CANCELADO';
+export type EstadoProyecto =
+  | "PLANIFICACION"
+  | "EN_EJECUCION"
+  | "EN_CIERRE"
+  | "CERRADO"
+  | "CANCELADO";
 
 export interface Alerta {
   tipo: string;
-  severidad: 'BAJA' | 'MEDIA' | 'ALTA' | 'CRITICA';
+  severidad: "BAJA" | "MEDIA" | "ALTA" | "CRITICA";
   mensaje: string;
   fecha: Date;
 }
@@ -74,7 +79,7 @@ export interface ItemFacturacion {
   fechaEstimada: Date;
   monto: number;
   porcentaje: number;
-  estado: 'PENDIENTE' | 'FACTURADO' | 'COBRADO';
+  estado: "PENDIENTE" | "FACTURADO" | "COBRADO";
 }
 
 export interface CapaDos {
@@ -106,14 +111,41 @@ export interface CapaDos {
 }
 
 export interface Hito {
+  id?: string;
   nombre: string;
   descripcion: string;
   fechaInicio: Date;
   fechaFinPlanificada: Date;
   fechaFinReal?: Date;
-  estado: 'NO_INICIADO' | 'EN_PROGRESO' | 'COMPLETADO' | 'RETRASADO' | 'BLOQUEADO';
-  semaforo: 'VERDE' | 'AMARILLO' | 'ROJO';
+  responsable?: Responsable;
+  estado:
+    | "NO_INICIADO"
+    | "EN_PROGRESO"
+    | "COMPLETADO"
+    | "RETRASADO"
+    | "BLOQUEADO";
+  semaforo: "VERDE" | "AMARILLO" | "ROJO";
   avancePorcentaje: number;
+  tareas?: Tarea[];
+}
+
+export interface Tarea {
+  id: string;
+  nombre: string;
+  responsable: {
+    nombre: string;
+    cargo: string;
+  };
+  fechaInicio: string;
+  fechaFin: string;
+  estado: "PENDIENTE" | "EN_PROGRESO" | "COMPLETADA" | "RETRASADA";
+}
+
+export interface Responsable {
+  nombre: string;
+  email: string;
+  cargo: string;
+  avatar?: string;
 }
 
 export interface TeamMember {
@@ -127,25 +159,30 @@ export interface TeamMember {
 export interface CumplimientoSLA {
   slaId: string;
   nombre: string;
-  estado: 'CUMPLIDO' | 'EN_RIESGO' | 'INCUMPLIDO';
+  estado: "CUMPLIDO" | "EN_RIESGO" | "INCUMPLIDO";
   valorActual: string;
   valorCompromiso: string;
-  semaforo: 'VERDE' | 'AMARILLO' | 'ROJO';
+  semaforo: "VERDE" | "AMARILLO" | "ROJO";
 }
 
 export interface Riesgo {
   descripcion: string;
   categoria?: string;
-  severidad: 'BAJA' | 'MEDIA' | 'ALTA' | 'CRITICA';
+  severidad: "BAJA" | "MEDIA" | "ALTA" | "CRITICA";
   probabilidad?: string;
   impacto?: string;
   planMitigacion?: string;
-  estado?: 'IDENTIFICADO' | 'EN_MITIGACION' | 'MITIGADO' | 'MATERIALIZADO';
+  estado?: "IDENTIFICADO" | "EN_MITIGACION" | "MITIGADO" | "MATERIALIZADO";
   fechaIdentificacion?: Date;
 }
 
 export interface HistorialItem {
-  tipo: 'CHANGE_REQUEST' | 'DECISION' | 'CAMBIO_ESTRATEGIA' | 'HITO' | 'INCIDENCIA';
+  tipo:
+    | "CHANGE_REQUEST"
+    | "DECISION"
+    | "CAMBIO_ESTRATEGIA"
+    | "HITO"
+    | "INCIDENCIA";
   titulo: string;
   descripcion: string;
   fecha: Date;
@@ -157,7 +194,7 @@ export interface CapaTres {
   _id?: string;
   proyecto: string;
   repositorio?: {
-    tipo?: 'GITLAB' | 'GITHUB' | 'BITBUCKET' | 'AZURE_DEVOPS';
+    tipo?: "GITHUB" | "SHAREPOINT" | "CONFLUENCE";
     url?: string;
     rama?: string;
     ultimoCommit?: any;
@@ -198,7 +235,7 @@ export interface DeudaTecnica {
   alta?: number;
   media?: number;
   baja?: number;
-  tendencia?: 'MEJORANDO' | 'ESTABLE' | 'EMPEORANDO';
+  tendencia?: "MEJORANDO" | "ESTABLE" | "EMPEORANDO";
 }
 
 export interface Coverage {
@@ -210,12 +247,12 @@ export interface Coverage {
 
 export interface Vulnerabilidad {
   tipo: string;
-  severidad: 'CRITICA' | 'ALTA' | 'MEDIA' | 'BAJA';
+  severidad: "CRITICA" | "ALTA" | "MEDIA" | "BAJA";
   descripcion: string;
   archivo: string;
   linea: number;
   recomendacion: string;
-  estado: 'ABIERTA' | 'EN_REVISION' | 'RESUELTA' | 'ACEPTADA';
+  estado: "ABIERTA" | "EN_REVISION" | "RESUELTA" | "ACEPTADA";
 }
 
 export interface Antipatron {
@@ -240,7 +277,7 @@ export interface CapaCuatro {
   scoreGlobal?: {
     valor?: number;
     ultimaActualizacion?: Date;
-    tendencia?: 'MEJORANDO' | 'ESTABLE' | 'EMPEORANDO';
+    tendencia?: "MEJORANDO" | "ESTABLE" | "EMPEORANDO";
   };
   sensibilidadTecnica?: SensibilidadTecnica;
   sensibilidadEconomica?: SensibilidadEconomica;
@@ -257,7 +294,7 @@ export interface SensibilidadTecnica {
 
 export interface AlertaTemprana {
   tipo: string;
-  severidad: 'BAJA' | 'MEDIA' | 'ALTA' | 'CRITICA';
+  severidad: "BAJA" | "MEDIA" | "ALTA" | "CRITICA";
   descripcion: string;
   metricas?: any[];
   accionesRecomendadas?: string[];
@@ -299,13 +336,13 @@ export interface EscenarioWhatIf {
 }
 
 export interface Recomendacion {
-  tipo: 'ACCION_CORRECTIVA' | 'OPTIMIZACION' | 'PREVENTIVA' | 'ESTRATEGICA';
-  prioridad: 'BAJA' | 'MEDIA' | 'ALTA' | 'URGENTE';
+  tipo: "ACCION_CORRECTIVA" | "OPTIMIZACION" | "PREVENTIVA" | "ESTRATEGICA";
+  prioridad: "BAJA" | "MEDIA" | "ALTA" | "URGENTE";
   titulo: string;
   descripcion: string;
   impactoEstimado?: string;
   esfuerzoRequerido?: string;
   beneficioEsperado?: string;
-  estado: 'PENDIENTE' | 'EN_IMPLEMENTACION' | 'IMPLEMENTADA' | 'RECHAZADA';
+  estado: "PENDIENTE" | "EN_IMPLEMENTACION" | "IMPLEMENTADA" | "RECHAZADA";
   fechaGeneracion?: Date;
 }

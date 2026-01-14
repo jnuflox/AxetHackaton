@@ -35,10 +35,12 @@
     <!-- Hitos -->
     <div class="section card" *ngIf="capaData.cronograma?.hitos?.length">
       <h3><i class="fas fa-flag-checkered"></i> Hitos del Proyecto</h3>
+      <p class="hint-text">Haz clic en un hito para ver sus tareas asociadas</p>
       <table>
         <thead>
           <tr>
             <th>Hito</th>
+            <th>Responsable</th>
             <th>Fecha Planificada</th>
             <th>Fecha Real</th>
             <th>Estado</th>
@@ -46,10 +48,38 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let hito of capaData.cronograma.hitos">
-            <td><strong>{{ hito.nombre }}</strong></td>
+          <tr
+            *ngFor="let hito of capaData.cronograma.hitos"
+            (click)="seleccionarHito(hito)"
+            [class.hito-seleccionado]="hitoSeleccionado?.id === hito.id"
+            class="hito-row"
+          >
+            <td>
+              <strong>{{ hito.nombre }}</strong>
+              <span class="tareas-count" *ngIf="hito.tareas?.length">
+                {{ hito.tareas.length }} tareas
+              </span>
+            </td>
+            <td>
+              <div class="responsable-cell" *ngIf="hito.responsable">
+                <div class="responsable-avatar">
+                  {{ getInitials(hito.responsable.nombre) }}
+                </div>
+                <div class="responsable-info">
+                  <span class="responsable-nombre">{{
+                    hito.responsable.nombre
+                  }}</span>
+                  <span class="responsable-cargo">{{
+                    hito.responsable.cargo
+                  }}</span>
+                </div>
+              </div>
+              <span *ngIf="!hito.responsable" class="sin-asignar"
+                >Sin asignar</span
+              >
+            </td>
             <td>{{ hito.fechaPlanificada }}</td>
-            <td>{{ hito.fechaReal || 'Pendiente' }}</td>
+            <td>{{ hito.fechaReal || "Pendiente" }}</td>
             <td>{{ hito.estado }}</td>
             <td>
               <span class="badge" [ngClass]="getSemaforoClass(hito.semaforo)">
@@ -59,6 +89,75 @@
           </tr>
         </tbody>
       </table>
+
+      <!-- Panel de Tareas del Hito Seleccionado -->
+      <div class="tareas-panel" *ngIf="hitoSeleccionado">
+        <div class="tareas-header">
+          <h4>
+            <i class="fas fa-tasks"></i>
+            Tareas del Hito: {{ hitoSeleccionado.nombre }}
+          </h4>
+          <button class="btn-close" (click)="hitoSeleccionado = null">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div
+          class="tareas-list"
+          *ngIf="hitoSeleccionado.tareas?.length; else noTareas"
+        >
+          <table class="tareas-table">
+            <thead>
+              <tr>
+                <th>Tarea</th>
+                <th>Responsable</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Fin</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let tarea of hitoSeleccionado.tareas">
+                <td>
+                  <strong>{{ tarea.nombre }}</strong>
+                </td>
+                <td>
+                  <div class="responsable-cell">
+                    <div class="responsable-avatar small">
+                      {{ getInitials(tarea.responsable.nombre) }}
+                    </div>
+                    <div class="responsable-info">
+                      <span class="responsable-nombre">{{
+                        tarea.responsable.nombre
+                      }}</span>
+                      <span class="responsable-cargo">{{
+                        tarea.responsable.cargo
+                      }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td>{{ tarea.fechaInicio }}</td>
+                <td>{{ tarea.fechaFin }}</td>
+                <td>
+                  <span
+                    class="badge-estado"
+                    [ngClass]="getEstadoTareaClass(tarea.estado)"
+                  >
+                    {{ tarea.estado }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ng-template #noTareas>
+          <div class="no-tareas">
+            <i class="fas fa-inbox"></i>
+            <p>No hay tareas registradas para este hito</p>
+          </div>
+        </ng-template>
+      </div>
     </div>
 
     <!-- Riesgos Activos -->
@@ -68,12 +167,18 @@
         <div class="riesgo-item" *ngFor="let riesgo of capaData.riesgos">
           <div class="riesgo-header">
             <strong>{{ riesgo.descripcion }}</strong>
-            <span class="badge" [ngClass]="'badge-' + riesgo.severidad?.toLowerCase()">
+            <span
+              class="badge"
+              [ngClass]="'badge-' + riesgo.severidad?.toLowerCase()"
+            >
               {{ riesgo.severidad }}
             </span>
           </div>
           <p><strong>Estado:</strong> {{ riesgo.estado }}</p>
-          <p><strong>Plan de Mitigación:</strong> {{ riesgo.planMitigacion || 'N/A' }}</p>
+          <p>
+            <strong>Plan de Mitigación:</strong>
+            {{ riesgo.planMitigacion || "N/A" }}
+          </p>
         </div>
       </div>
     </div>

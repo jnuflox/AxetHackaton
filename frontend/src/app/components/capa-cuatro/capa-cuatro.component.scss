@@ -47,9 +47,15 @@
   margin-bottom: 1rem;
 }
 
-.tendencia-mejorando { color: #4caf50; }
-.tendencia-estable { color: #ff9800; }
-.tendencia-empeorando { color: #f44336; }
+.tendencia-mejorando {
+  color: #4caf50;
+}
+.tendencia-estable {
+  color: #ff9800;
+}
+.tendencia-empeorando {
+  color: #f44336;
+}
 
 .grid {
   display: grid;
@@ -79,43 +85,65 @@
   font-weight: bold;
 }
 
-.alertas-list, .recomendaciones-list {
+.alertas-list,
+.recomendaciones-list {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.alerta-item, .recomendacion-item {
+.alerta-item,
+.recomendacion-item {
   padding: 1rem;
   background-color: var(--bg-secondary);
   border-radius: 4px;
   border-left: 4px solid var(--primary-color);
 }
 
-.alerta-header, .rec-header {
+.alerta-header,
+.rec-header {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
 }
 
-.alerta-item p, .recomendacion-item p {
+.alerta-item p,
+.recomendacion-item p {
   margin: 0.25rem 0;
   font-size: 0.875rem;
 }
 
-.alerta-fecha, .rec-impacto {
+.alerta-fecha,
+.rec-impacto {
   color: var(--text-secondary);
   margin-top: 0.5rem;
 }
 
-.badge-baja { background-color: #c8e6c9; color: #2e7d32; }
-.badge-media { background-color: #fff9c4; color: #f57f17; }
-.badge-alta { background-color: #ffccbc; color: #d84315; }
-.badge-critica { background-color: #ffcdd2; color: #c62828; }
-.badge-prioridad { background-color: #e1bee7; color: #6a1b9a; }
+.badge-baja {
+  background-color: #c8e6c9;
+  color: #2e7d32;
+}
+.badge-media {
+  background-color: #fff9c4;
+  color: #f57f17;
+}
+.badge-alta {
+  background-color: #ffccbc;
+  color: #d84315;
+}
+.badge-critica {
+  background-color: #ffcdd2;
+  color: #c62828;
+}
+.badge-prioridad {
+  background-color: #e1bee7;
+  color: #6a1b9a;
+}
 
-.loading, .empty-state, .error {
+.loading,
+.empty-state,
+.error {
   text-align: center;
   padding: 3rem 0;
   color: var(--text-secondary);
@@ -133,4 +161,209 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+
+// Estilos para sección de Conectores
+.conectores-descripcion {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.conectores-filtros {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+
+  .filtro-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+
+    &:hover {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+
+    &.active {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      color: white;
+    }
+  }
+}
+
+.conectores-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.conector-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.25rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .conector-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    .conector-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: white;
+
+      &.jira {
+        background: linear-gradient(135deg, #0052cc, #2684ff);
+      }
+      &.github {
+        background: linear-gradient(135deg, #24292e, #404448);
+      }
+      &.teams {
+        background: linear-gradient(135deg, #5059c9, #7b83eb);
+      }
+      &.sharepoint {
+        background: linear-gradient(135deg, #0078d4, #00bcf2);
+      }
+      &.confluence {
+        background: linear-gradient(135deg, #0052cc, #2684ff);
+      }
+      &.sonarqube {
+        background: linear-gradient(135deg, #4e9bcd, #549dd0);
+      }
+      &.outlook {
+        background: linear-gradient(135deg, #0078d4, #00bcf2);
+      }
+    }
+
+    .conector-info {
+      flex: 1;
+
+      h4 {
+        margin: 0 0 0.25rem 0;
+        font-size: 1rem;
+        color: var(--text-primary);
+      }
+
+      .categoria {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+      }
+    }
+
+    .conector-status {
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+
+      &.ACTIVO {
+        background-color: #c8e6c9;
+        color: #2e7d32;
+      }
+
+      &.DISPONIBLE {
+        background-color: #e3f2fd;
+        color: #1565c0;
+      }
+
+      &.INACTIVO {
+        background-color: #f5f5f5;
+        color: #757575;
+      }
+    }
+  }
+
+  .conector-body {
+    .descripcion {
+      font-size: 0.825rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+      line-height: 1.4;
+    }
+
+    .datos-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.375rem;
+
+      .dato-tag {
+        padding: 0.2rem 0.5rem;
+        background-color: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        font-size: 0.7rem;
+        color: var(--text-secondary);
+      }
+    }
+  }
+}
+
+.conectores-resumen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 8px;
+  color: white;
+
+  .resumen-item {
+    text-align: center;
+
+    .resumen-valor {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+    }
+
+    .resumen-label {
+      font-size: 0.8rem;
+      opacity: 0.9;
+    }
+  }
+
+  .btn-conectar {
+    padding: 0.75rem 1.5rem;
+    background-color: white;
+    color: #667eea;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    align-self: center;
+
+    &:hover {
+      background-color: #f5f5f5;
+      transform: scale(1.02);
+    }
+
+    i {
+      margin-right: 0.5rem;
+    }
+  }
 }
