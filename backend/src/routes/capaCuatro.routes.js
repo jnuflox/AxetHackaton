@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const genaiService = require("../services/genai-analysis.service");
+const logger = require("../utils/logger");
 
 // Función para obtener fecha/hora actual formateada
 const getTimestampActual = () => {
@@ -470,6 +472,209 @@ router.get("/:proyectoId", async (req, res, next) => {
       success: true,
       data: capaCuatro,
     });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ============================================================================
+// ENDPOINTS GenAI - Análisis Predictivo con Inteligencia Artificial
+// ============================================================================
+
+/**
+ * POST /:proyectoId/analyze-genai
+ * Ejecuta análisis GenAI con datos de capas 1, 2, 3 y conectores seleccionados
+ */
+router.post("/:proyectoId/analyze-genai", async (req, res, next) => {
+  try {
+    const { proyectoId } = req.params;
+    const { conectoresSeleccionados, tipoAnalisis } = req.body;
+
+    logger.info(`Iniciando análisis GenAI para proyecto ${proyectoId}`);
+
+    // Mock de datos de capas 1, 2, 3 (en producción vendría de la BD)
+    const mockCapaUno = {
+      rfp: {
+        slas: [
+          { tipo: "DISPONIBILIDAD", valor: 99.5, unidad: "%" },
+          { tipo: "TIEMPO_RESPUESTA", valor: 2, unidad: "segundos" }
+        ]
+      },
+      gecoval: {
+        presupuesto: 500000,
+        esfuerzoEstimadoHoras: 8000
+      },
+      l1: {
+        ofertaCM: 22,
+        pisoCM: 15,
+        riesgosIniciales: ["Integración sistemas legacy", "Disponibilidad recursos"]
+      },
+      propuestaEconomica: {
+        presupuestoTotal: 500000
+      }
+    };
+
+    const mockCapaDos = {
+      cronograma: {
+        hitos: [
+          { nombre: "M1 - Kickoff", estado: "COMPLETADO", semaforo: "VERDE", avancePorcentaje: 100, fechaFinPlanificada: "2024-01-15", fechaFinReal: "2024-01-14" },
+          { nombre: "M2 - Diseño", estado: "COMPLETADO", semaforo: "VERDE", avancePorcentaje: 100, fechaFinPlanificada: "2024-02-15", fechaFinReal: "2024-02-20" },
+          { nombre: "M3 - Desarrollo", estado: "EN_PROGRESO", semaforo: "AMARILLO", avancePorcentaje: 65, fechaFinPlanificada: "2024-04-01" },
+          { nombre: "M4 - Testing", estado: "PENDIENTE", semaforo: "VERDE", avancePorcentaje: 0, fechaFinPlanificada: "2024-05-01" }
+        ],
+        equipoAsignado: ["DEV001", "DEV002", "DEV003", "QA001"],
+        esfuerzoReal: 4200,
+        esfuerzoEstimado: 4000
+      },
+      jira: {
+        velocidadPromedio: 42,
+        issuesCompletados: 156,
+        issuesPendientes: 48,
+        sprintActual: "Sprint 12"
+      },
+      kpis: {
+        cumplimientoTareas: 82,
+        avanceHitos: 75,
+        cumplimientoSLAs: [
+          { sla: "Disponibilidad", cumplimiento: 99.8 },
+          { sla: "Tiempo Respuesta", cumplimiento: 98.5 }
+        ]
+      },
+      riesgos: [
+        { id: "R001", descripcion: "Dependencia de API externa", estado: "ACTIVO", probabilidad: 60, impacto: "ALTO" },
+        { id: "R002", descripcion: "Rotación de personal", estado: "MITIGADO", probabilidad: 30, impacto: "MEDIO" }
+      ]
+    };
+
+    const mockCapaTres = {
+      sonarqube: {
+        metricas: {
+          bugs: 12,
+          vulnerabilities: 3,
+          codeSmells: 89,
+          coverage: 72,
+          duplicatedLinesDensity: 4.2,
+          technicalDebt: 18,
+          reliabilityRating: "B",
+          securityRating: "A",
+          maintainabilityRating: "B"
+        },
+        deudaTecnica: {
+          totalDias: 18,
+          categorias: {
+            reliability: 5,
+            security: 3,
+            maintainability: 10
+          }
+        }
+      },
+      coverage: {
+        unitario: { lineCoverage: 75, branchCoverage: 68 },
+        integracion: { lineCoverage: 65, branchCoverage: 55 }
+      },
+      vulnerabilidades: [
+        { id: "V001", severidad: "ALTA", estado: "ABIERTA", descripcion: "SQL Injection potencial" },
+        { id: "V002", severidad: "MEDIA", estado: "EN_REMEDIACION", descripcion: "XSS reflejado" }
+      ],
+      antipatrones: ["God Class detectada", "Código duplicado en módulo Auth"],
+      cumplimientoEstandares: {
+        OWASP: 85,
+        cleanCode: 78,
+        sonarRules: 92
+      }
+    };
+
+    // Mapear IDs de conectores a objetos completos con estado ACTIVO
+    let conectores;
+    if (conectoresSeleccionados && conectoresSeleccionados.length > 0) {
+      conectores = conectoresSeleccionados.map(id => {
+        // Si es un objeto, usarlo directamente
+        if (typeof id === 'object') return id;
+        // Si es un string (ID), buscar en conectores disponibles o crear objeto
+        const conectorEncontrado = conectoresDisponibles.find(c => c.id === id);
+        return conectorEncontrado 
+          ? { ...conectorEncontrado, estado: 'ACTIVO' }
+          : { id: id, nombre: id.charAt(0).toUpperCase() + id.slice(1), estado: 'ACTIVO' };
+      });
+    } else {
+      conectores = conectoresDisponibles.filter(c => c.estado === "ACTIVO");
+    }
+
+    logger.info(`Conectores para análisis: ${JSON.stringify(conectores.map(c => ({id: c.id, nombre: c.nombre, estado: c.estado})))}`);
+
+    // Ejecutar análisis GenAI
+    const resultado = await genaiService.executeAnalysis(
+      proyectoId,
+      mockCapaUno,
+      mockCapaDos,
+      mockCapaTres,
+      conectores,
+      tipoAnalisis || "FULL"
+    );
+
+    res.json({
+      success: true,
+      data: resultado
+    });
+  } catch (error) {
+    logger.error("Error en análisis GenAI:", error);
+    next(error);
+  }
+});
+
+/**
+ * GET /:proyectoId/genai-insights
+ * Obtiene los últimos insights generados por GenAI para un proyecto
+ */
+router.get("/:proyectoId/genai-insights", async (req, res, next) => {
+  try {
+    const { proyectoId } = req.params;
+    
+    // En producción, esto vendría de la base de datos
+    // Por ahora retornamos los datos mock de capa4 con insights adicionales
+    const capaCuatro = mockCapaCuatro[proyectoId] || mockCapaCuatro["1"];
+    
+    res.json({
+      success: true,
+      data: {
+        proyectoId,
+        ultimoAnalisis: capaCuatro.scoreGlobal?.ultimaActualizacion,
+        insights: {
+          scoreGlobal: capaCuatro.scoreGlobal,
+          sensibilidadTecnica: capaCuatro.sensibilidadTecnica,
+          sensibilidadEconomica: capaCuatro.sensibilidadEconomica,
+          recomendaciones: capaCuatro.recomendaciones
+        }
+      }
+    });
+  } catch (error) {
+    logger.error("Error obteniendo insights GenAI:", error);
+    next(error);
+  }
+});
+
+/**
+ * GET /conectores
+ * Lista todos los conectores disponibles para integración
+ */
+router.get("/config/conectores", async (req, res, next) => {
+  try {
+    res.json({
+      success: true,
+      data: conectoresDisponibles
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+/**
+ * GET /config/conectores
+ */
+router.get("/config/conectores", async (req, res, next) => {
+  try {
+    res.json({ success: true, data: conectoresDisponibles });
   } catch (error) {
     next(error);
   }

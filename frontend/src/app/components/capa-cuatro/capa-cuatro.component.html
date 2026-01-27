@@ -13,6 +13,303 @@
   </div>
 
   <div *ngIf="!loading && !error && capaData">
+    
+    <!-- ========== NUEVO PANEL GENAI ========== -->
+    <div class="genai-panel card">
+      <div class="genai-header" (click)="mostrarPanelGenAI = !mostrarPanelGenAI">
+        <div class="genai-title">
+          <i class="fas fa-robot"></i>
+          <h3>Motor de Análisis GenAI</h3>
+          <span class="genai-badge" *ngIf="genaiResult">
+            <i class="fas fa-check-circle"></i> Análisis Disponible
+          </span>
+        </div>
+        <i class="fas" [ngClass]="mostrarPanelGenAI ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+      </div>
+
+      <div class="genai-content" *ngIf="mostrarPanelGenAI">
+        
+        <!-- Selector de Conectores -->
+        <div class="genai-conectores">
+          <h4><i class="fas fa-plug"></i> Selecciona los conectores para el análisis</h4>
+          <p class="genai-descripcion">
+            Los datos de las Capas 1, 2 y 3 se combinarán con la información de los conectores seleccionados para generar predicciones y recomendaciones.
+          </p>
+          
+          <div class="conectores-selector">
+            <div 
+              class="conector-chip" 
+              *ngFor="let conector of conectoresDisponibles"
+              [class.selected]="isConectorSelected(conector.id)"
+              [class.disabled]="conector.estado === 'INACTIVO'"
+              (click)="conector.estado !== 'INACTIVO' && toggleConector(conector.id)">
+              <i [class]="getConectorIcon(conector.id)"></i>
+              <span>{{ conector.nombre }}</span>
+              <span class="chip-status" [class]="'status-' + conector.estado.toLowerCase()">
+                {{ conector.estado }}
+              </span>
+            </div>
+          </div>
+
+          <div class="genai-opciones">
+            <div class="opcion-grupo">
+              <label>Nivel de detalle:</label>
+              <select [(ngModel)]="nivelDetalle" class="select-detalle">
+                <option value="BASICO">Básico</option>
+                <option value="DETALLADO">Detallado</option>
+                <option value="EXHAUSTIVO">Exhaustivo</option>
+              </select>
+            </div>
+            <div class="conectores-seleccionados">
+              <span class="contador">{{ conectoresSeleccionados.length }}</span> conectores seleccionados
+            </div>
+          </div>
+        </div>
+
+        <!-- Botón de Análisis -->
+        <div class="genai-actions">
+          <button 
+            class="btn-analizar" 
+            (click)="ejecutarAnalisisGenAI()" 
+            [disabled]="genaiLoading || conectoresSeleccionados.length === 0">
+            <i class="fas" [ngClass]="genaiLoading ? 'fa-spinner fa-spin' : 'fa-magic'"></i>
+            {{ genaiLoading ? 'Analizando...' : 'Ejecutar Análisis GenAI' }}
+          </button>
+          <button 
+            class="btn-limpiar" 
+            *ngIf="genaiResult" 
+            (click)="limpiarAnalisis()">
+            <i class="fas fa-trash-alt"></i>
+            Limpiar
+          </button>
+        </div>
+
+        <div class="genai-error" *ngIf="genaiError">
+          <i class="fas fa-exclamation-triangle"></i>
+          {{ genaiError }}
+        </div>
+
+        <!-- Resultados GenAI -->
+        <div class="genai-results" *ngIf="genaiResult">
+          
+          <!-- Tabs de navegación -->
+          <div class="genai-tabs">
+            <button 
+              class="tab-btn" 
+              [class.active]="activeGenAITab === 'resumen'"
+              (click)="activeGenAITab = 'resumen'">
+              <i class="fas fa-chart-pie"></i> Resumen
+            </button>
+            <button 
+              class="tab-btn" 
+              [class.active]="activeGenAITab === 'riesgos'"
+              (click)="activeGenAITab = 'riesgos'">
+              <i class="fas fa-exclamation-triangle"></i> Riesgos
+              <span class="badge-count" *ngIf="riesgosCriticos.length">{{ riesgosCriticos.length }}</span>
+            </button>
+            <button 
+              class="tab-btn" 
+              [class.active]="activeGenAITab === 'recomendaciones'"
+              (click)="activeGenAITab = 'recomendaciones'">
+              <i class="fas fa-lightbulb"></i> Recomendaciones
+            </button>
+            <button 
+              class="tab-btn" 
+              [class.active]="activeGenAITab === 'alertas'"
+              (click)="activeGenAITab = 'alertas'">
+              <i class="fas fa-bell"></i> Alertas
+              <span class="badge-count" *ngIf="alertasNoLeidas.length">{{ alertasNoLeidas.length }}</span>
+            </button>
+          </div>
+
+          <!-- Tab: Resumen Ejecutivo -->
+          <div class="tab-content" *ngIf="activeGenAITab === 'resumen'">
+            <div class="resumen-ejecutivo" *ngIf="genaiResult?.resumenEjecutivo">
+              <div class="resumen-header">
+                <div 
+                  class="estado-badge" 
+                  [style.background-color]="getStatusColor(genaiResult.resumenEjecutivo?.estadoGeneral)">
+                  {{ genaiResult.resumenEjecutivo?.estadoGeneral | titlecase }}
+                </div>
+                <div class="puntuacion-salud">
+                  <div class="score-circle-mini" 
+                       [style.border-color]="getStatusColor(genaiResult.resumenEjecutivo?.estadoGeneral)">
+                    {{ genaiResult.resumenEjecutivo?.puntuacionSalud }}
+                  </div>
+                  <span>Puntuación de Salud</span>
+                </div>
+                <div class="tendencia-proyecto">
+                  <i class="fas" [ngClass]="getTendenciaIcon(genaiResult.resumenEjecutivo?.tendenciaProyecto)"></i>
+                  <span [ngClass]="getTendenciaClass(genaiResult.resumenEjecutivo?.tendenciaProyecto)">
+                    {{ genaiResult.resumenEjecutivo?.tendenciaProyecto }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="resumen-texto">
+                <p>{{ genaiResult.resumenEjecutivo?.resumenTexto }}</p>
+              </div>
+
+              <div class="conclusiones">
+                <h5><i class="fas fa-list-check"></i> Principales Conclusiones</h5>
+                <ul>
+                  <li *ngFor="let conclusion of genaiResult.resumenEjecutivo?.principalesConclusiones">
+                    {{ conclusion }}
+                  </li>
+                </ul>
+              </div>
+
+              <div class="metricas-analisis" *ngIf="genaiResult.metricas">
+                <div class="metrica">
+                  <span class="metrica-valor">{{ genaiResult.metricas?.confianzaModelo }}%</span>
+                  <span class="metrica-label">Confianza</span>
+                </div>
+                <div class="metrica">
+                  <span class="metrica-valor">{{ genaiResult.metricas?.datosAnalizados }}</span>
+                  <span class="metrica-label">Datos Analizados</span>
+                </div>
+                <div class="metrica">
+                  <span class="metrica-valor">{{ genaiResult.metricas?.tiempoAnalisis }}ms</span>
+                  <span class="metrica-label">Tiempo</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab: Riesgos Predichos -->
+          <div class="tab-content" *ngIf="activeGenAITab === 'riesgos'">
+            <div class="riesgos-grid">
+              <div 
+                class="riesgo-card" 
+                *ngFor="let riesgo of riesgosOrdenados"
+                [style.border-left-color]="getImpactColor(riesgo.impacto)">
+                <div class="riesgo-header">
+                  <span class="riesgo-titulo">{{ riesgo.titulo }}</span>
+                  <span 
+                    class="riesgo-impacto" 
+                    [style.background-color]="getImpactColor(riesgo.impacto)">
+                    {{ riesgo.impacto }}
+                  </span>
+                </div>
+                <p class="riesgo-descripcion">{{ riesgo.descripcion }}</p>
+                
+                <div class="riesgo-probabilidad">
+                  <div class="prob-bar">
+                    <div 
+                      class="prob-fill" 
+                      [style.width.%]="riesgo.probabilidad"
+                      [ngClass]="getProbabilidadClass(riesgo.probabilidad)">
+                    </div>
+                  </div>
+                  <span class="prob-valor">{{ riesgo.probabilidad }}% probabilidad</span>
+                </div>
+
+                <div class="riesgo-factores" *ngIf="riesgo.factoresContribuyentes?.length">
+                  <strong>Factores:</strong>
+                  <span class="factor-tag" *ngFor="let factor of riesgo.factoresContribuyentes">
+                    {{ factor }}
+                  </span>
+                </div>
+
+                <div class="riesgo-mitigacion">
+                  <i class="fas fa-shield-alt"></i>
+                  <span>{{ riesgo.mitigacionSugerida }}</span>
+                </div>
+
+                <div class="riesgo-footer">
+                  <span class="tendencia-indicator" [ngClass]="getTendenciaClass(riesgo.tendencia)">
+                    <i class="fas" [ngClass]="getTendenciaIcon(riesgo.tendencia)"></i>
+                    {{ riesgo.tendencia }}
+                  </span>
+                  <span class="fecha">{{ formatDate(riesgo.fechaDeteccion) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab: Recomendaciones -->
+          <div class="tab-content" *ngIf="activeGenAITab === 'recomendaciones'">
+            <div class="recomendaciones-grid">
+              <div 
+                class="recomendacion-card" 
+                *ngFor="let rec of recomendacionesOrdenadas"
+                [class]="'tipo-' + rec.tipo.toLowerCase()">
+                <div class="rec-header">
+                  <div class="rec-tipo">
+                    <i class="fas" [ngClass]="'fa-' + getRecommendationIcon(rec.tipo)"></i>
+                    <span>{{ rec.tipo }}</span>
+                  </div>
+                  <span class="rec-prioridad">Prioridad {{ rec.prioridad }}</span>
+                </div>
+                
+                <h5 class="rec-titulo">{{ rec.titulo }}</h5>
+                <p class="rec-descripcion">{{ rec.descripcion }}</p>
+                
+                <div class="rec-accion">
+                  <strong><i class="fas fa-tasks"></i> Acción recomendada:</strong>
+                  <p>{{ rec.accionRecomendada }}</p>
+                </div>
+
+                <div class="rec-footer">
+                  <div class="rec-impacto">
+                    <i class="fas fa-chart-line"></i>
+                    {{ rec.impactoEsperado }}
+                  </div>
+                  <div class="rec-esfuerzo">
+                    <i class="fas fa-clock"></i>
+                    {{ rec.esfuerzoEstimado }}
+                  </div>
+                </div>
+
+                <div class="rec-area">
+                  <i class="fas fa-tag"></i> {{ rec.areaAfectada }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab: Alertas -->
+          <div class="tab-content" *ngIf="activeGenAITab === 'alertas'">
+            <div class="alertas-timeline">
+              <div 
+                class="alerta-item-genai" 
+                *ngFor="let alerta of genaiResult.alertas"
+                [class]="'alerta-' + alerta.tipo.toLowerCase()"
+                [class.no-leida]="!alerta.leida">
+                <div class="alerta-icon">
+                  <i class="fas" [ngClass]="{
+                    'fa-times-circle': alerta.tipo === 'CRITICA',
+                    'fa-exclamation-triangle': alerta.tipo === 'ADVERTENCIA',
+                    'fa-info-circle': alerta.tipo === 'INFO'
+                  }"></i>
+                </div>
+                <div class="alerta-content">
+                  <div class="alerta-header-genai">
+                    <span class="alerta-tipo-badge">{{ alerta.tipo }}</span>
+                    <span class="alerta-origen">{{ alerta.origen }}</span>
+                  </div>
+                  <p class="alerta-mensaje">{{ alerta.mensaje }}</p>
+                  <span class="alerta-tiempo">{{ formatDate(alerta.timestamp) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="genai-footer">
+            <span class="timestamp">
+              <i class="fas fa-clock"></i>
+              Último análisis: {{ formatDate(genaiResult.timestamp) }}
+            </span>
+            <span class="conectores-usados">
+              <i class="fas fa-plug"></i>
+              Conectores: {{ genaiResult.conectoresAnalizados?.join(', ') || 'N/A' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ========== FIN PANEL GENAI ========== -->
+
     <!-- Score Global -->
     <div class="section card" *ngIf="capaData.scoreGlobal">
       <h3><i class="fas fa-star"></i> Score Global de Salud</h3>
